@@ -51,6 +51,7 @@ public class GUI {
         String arenaName = arena.getName();
 
         final Consumer<Section> readTemplateSection = section -> {
+            Bukkit.getLogger().info("BTS Section Name: " + section.getNameAsString());
             int size = section.getInt("size");
             Inventory gui = Bukkit.createInventory(
                     null, size, colorAPI.process(title));
@@ -300,22 +301,18 @@ public class GUI {
         boolean found = false;
 
         if(isPerArenaTemplatesEnabled) {
-            Section templatesSection = config.getSection("team-selector.per-arena-templates");
+            Section arenaTemplatesSection = config.getSection("team-selector.per-arena-templates");
 
-            for (Object rawKey : templatesSection.getKeys()) {
-                Section templateSection = templatesSection.getSection((String) rawKey);
+            if (arenaTemplatesSection.getSection((String) arenaName) != null) {
+                Section arenaTemplateSection = arenaTemplatesSection.getSection((String) arenaName);
 
-                if (templateSection == null)
-                    continue;
-
-                if (rawKey == arenaName) {
-                    readTemplateSection.accept(templateSection);
-                    found = true;
-                }
-
-                break;
+                readTemplateSection.accept(arenaTemplateSection);
+                found = true;
+                Bukkit.getLogger().info("BTS 311 Found: " + found);
             }
+
         }
+        Bukkit.getLogger().info("BTS 315 Found: " + found);
         if(!found) {
             if (isTemplatesEnabled) {
                 Section templatesSection = config.getSection("team-selector.templates");
@@ -339,7 +336,8 @@ public class GUI {
                 }
             }
         }
-        if (!found)
+        if (!found) {
             readTemplateSection.accept(config.getSection("team-selector.default-template"));
+        }
     }
 }
