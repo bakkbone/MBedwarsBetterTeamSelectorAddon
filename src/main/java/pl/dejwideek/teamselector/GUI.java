@@ -308,8 +308,10 @@ public class GUI {
                 if (templateSection == null)
                     continue;
 
-                readTemplateSection.accept(templateSection);
-                found = true;
+                if (rawKey == arenaName) {
+                    readTemplateSection.accept(templateSection);
+                    found = true;
+                }
 
                 break;
             }
