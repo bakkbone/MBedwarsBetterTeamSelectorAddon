@@ -308,11 +308,9 @@ public class GUI {
 
                 readTemplateSection.accept(arenaTemplateSection);
                 found = true;
-                Bukkit.getLogger().info("BTS 311 Found: " + found);
             }
 
         }
-        Bukkit.getLogger().info("BTS 315 Found: " + found);
         if(!found) {
             if (isTemplatesEnabled) {
                 Section templatesSection = config.getSection("team-selector.templates");
