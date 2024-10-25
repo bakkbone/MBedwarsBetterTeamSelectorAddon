@@ -51,7 +51,6 @@ public class GUI {
         String arenaName = arena.getName();
 
         final Consumer<Section> readTemplateSection = section -> {
-            Bukkit.getLogger().info("BTS Section Name: " + section.getNameAsString());
             int size = section.getInt("size");
             Inventory gui = Bukkit.createInventory(
                     null, size, colorAPI.process(title));
