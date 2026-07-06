@@ -1,10 +1,16 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.gradleup.shadow' version '9.5.1'
 }
 
 group 'pl.dejwideek'
-version '1.1.3'
+version '1.1.4'
+
+// Target Java 17 (works with modern JDKs used to build, e.g. 25) while keeping
+// the produced jar loadable on servers running Java 17+.
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+}
 
 repositories {
     mavenCentral()
