@@ -54,24 +54,23 @@ public class ColorAPI {
     }
 
     private static int getVersion() {
-        String version = Bukkit.getVersion();
+        // getBukkitVersion() returns something like "1.21.4-R0.1-SNAPSHOT" even on
+        // Paper forks (aspaper, etc.), so it is more reliable than getVersion(),
+        // which embeds the fork version (e.g. "MC: 26.1.2").
+        String version = Bukkit.getBukkitVersion();
         Validate.notEmpty(version, "Cannot get major Minecraft version from null or empty string");
 
-        // getVersion()
-        int index = version.lastIndexOf("MC:");
-        if (index != -1) {
-            version = version.substring(index + 4, version.length() - 1);
-        } else if (version.endsWith("SNAPSHOT")) {
-            // getBukkitVersion()
-            index = version.indexOf('-');
-            version = version.substring(0, index);
+        // Strip the "-R0.1-SNAPSHOT" suffix -> "1.21.4"
+        int dash = version.indexOf('-');
+        if (dash != -1) version = version.substring(0, dash);
+
+        // Extract the minor (the "21" of "1.21.4"); fall back to 1.8 (no RGB) on error.
+        String[] parts = version.split("\\.");
+        try {
+            return parts.length >= 2 ? Integer.parseInt(parts[1]) : 8;
+        } catch (NumberFormatException e) {
+            return 8;
         }
-
-        // 1.13.2, 1.14.4, etc...
-        int lastDot = version.lastIndexOf('.');
-        if (version.indexOf('.') != lastDot) version = version.substring(0, lastDot);
-
-        return Integer.parseInt(version.substring(2));
     }
 
     @Nonnull
